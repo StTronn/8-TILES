@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+:root {
+    --light:#6f74dd;
+    --main:#3949ab;
+    --dark:#00227b;
+    --dark-primary:#283655;
+    --dark-light:#4d648d    ;
+    --dark-dark: #1e1f26;
+    --bg-color:#408697;
+}
+
+h1{
+    text-align: center;
+    margin-top:50px;
+    margin-bottom:50px;
+    letter-spacing: 0.2em;
+}
+h3{
+    margin-top:20px;
+    margin-bottom: 20px; 
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    display:grid;
+    justify-content: center;
+    color:white;
+    background-color:  #4b86b4 ; 
+}
+
+
+
+.board{
+    display:inline-block;
+    background-color:var(--dark-light); 
+}
+
+.tile{
+    background-color:var(--dark-primary);
+    display: inline-block;
+    margin:10px; 
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size:1.4em;
+}
+.card{ 
+    padding: 15px;
+    border-radius:2px; 
+    background-color:var(--dark-dark); 
+}
+.clock{
+    text-align: center;
+    font-size:1.2em;
+}
+.buttons{
+    display: grid;
+}
+button {
+    display: inline-block;
+    margin: 0 auto;
+    border: none;
+    padding: 1rem 2rem;
+    margin: 0;
+    text-decoration: none;
+    background: var(--dark-light);
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.empty{
+    display: inline-block;
+    margin:10px; 
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size:1.4em;
+}
