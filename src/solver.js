@@ -186,13 +186,13 @@ function solver(start_board){
 function convArr(arr) {
 	let empty_i=0;
 	let empty_j=0;
-	let board = [[], [], []];
+	let grid = [[], [], []];
 	for (let i = 0; i < 9; i++){
-		board[Math.floor(i / 3)].push(arr[i]);
+		grid[Math.floor(i / 3)].push(arr[i]);
 		if(arr[i]===0)
 			{empty_i=Math.floor(i/3);empty_j=i%3}
 	}
-	return {board,empty_i,empty_j};
+	return {grid,empty_i,empty_j};
 }
 export function listMoves(arr2d){
   let arr=[];

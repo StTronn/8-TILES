@@ -30,10 +30,10 @@ export class Board extends React.Component{
             ],
             could_be_won:false,
             time:0,
+            solving:false,
         }
     }           
     componentDidMount(){
-        console.log(listMoves([1,2,3],[4,5,6],[7,0,8]));
 
     }
     componentWillUnmount(){
@@ -48,7 +48,33 @@ export class Board extends React.Component{
     increment=()=>{
         this.setState((state)=>({time:state.time+1}) );
     }
+    started_solving=()=>{
+        this.setState({could_be_won:false,solving:true});
+    }
+    solve=()=>{
 
+        let sol =listMoves(this.state.grid);
+        let i=0;
+        if(sol.length>1 && !this.state.solving){
+             this.started_solving();
+             this.timer=setInterval(()=>{
+                if(i<sol.length){
+                    this.setState(sol[i]);
+                    i++;
+                }
+                else 
+                    this.stop_solve();
+            },300);
+            this.reset();
+            //for(let i=0;i<sol.length;i++)
+            //    this.setState(sol[i]);
+        }
+    }
+    stop_solve=()=>{
+        clearInterval(this.timer);
+        this.reset();
+        this.setState({solving:false});
+    }
     handleChange =(event)=>{
         let grid=this.state.grid;
         let empty_i=this.state.empty_i;
@@ -127,6 +153,7 @@ export class Board extends React.Component{
             </div>
                 <div className="buttons">
                     <button onClick={correct?this.shuffleBoard:this.reset}>{correct?"START":"RESET"}</button>
+                    <button onClick={!this.state.solving?this.solve:this.stop_solve}>{!this.state.solving?"SOLVE":"STOP"}</button>
                 </div>
         </div>
         );
