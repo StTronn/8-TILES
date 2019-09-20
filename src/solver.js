@@ -183,11 +183,16 @@ function solver(start_board){
 }
 
 //converts a 1d array into 2d array
-function convArr(arr){
-  let ret=[[],[],[]];
-  for(let i=0;i<9;i++)
-    ret[Math.floor(i/3)].push(arr[i]);
-  return ret;
+function convArr(arr) {
+	let empty_i=0;
+	let empty_j=0;
+	let board = [[], [], []];
+	for (let i = 0; i < 9; i++){
+		board[Math.floor(i / 3)].push(arr[i]);
+		if(arr[i]===0)
+			{empty_i=Math.floor(i/3);empty_j=i%3}
+	}
+	return {board,empty_i,empty_j};
 }
 export function listMoves(arr2d){
   let arr=[];
