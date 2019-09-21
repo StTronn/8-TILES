@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "eb0f3859edc2c4d39c4918982ebbf373",
+    "revision": "e0acbf0dc241738734d3cc57f17a59b3",
     "url": "/8-TILES/index.html"
   },
   {
-    "revision": "0ccc8b3e2af6915f3141",
+    "revision": "7410c042f5a1ed17e9ac",
     "url": "/8-TILES/static/css/main.e90b6084.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/8-TILES/static/js/2.bb08a7a2.chunk.js"
   },
   {
-    "revision": "0ccc8b3e2af6915f3141",
-    "url": "/8-TILES/static/js/main.213ece10.chunk.js"
+    "revision": "7410c042f5a1ed17e9ac",
+    "url": "/8-TILES/static/js/main.9ba0837c.chunk.js"
   },
   {
     "revision": "fafd2b81914d28f774b4",
