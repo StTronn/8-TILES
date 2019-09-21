@@ -153,7 +153,7 @@ export class Board extends React.Component{
             </div>
                 <div className="buttons">
                     <button onClick={correct?this.shuffleBoard:this.reset}>{correct?"START":"RESET"}</button>
-                    <button onClick={!this.state.solving?this.solve:this.stop_solve}>{!this.state.solving?"SOLVE":"STOP"}</button>
+                    <button className="solve" onClick={!this.state.solving?this.solve:this.stop_solve}>{!this.state.solving?"SOLVE":"STOP"}</button>
                 </div>
         </div>
         );

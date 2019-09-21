@@ -43,6 +43,7 @@ body{
     width: 40px;
     height: 40px;
     text-align: center;
+    line-height: 1.64em;
     font-size:1.4em;
 }
 .card{ 
@@ -64,7 +65,7 @@ button {
     padding: 1rem 2rem;
     margin: 0;
     text-decoration: none;
-    background: var(--dark-light);
+    background: var(--dark-primary);
     color: #ffffff;
     font-family: sans-serif;
     font-size: 1rem;
@@ -74,6 +75,9 @@ button {
     transition: background 250ms ease-in-out, transform 150ms ease;
     -webkit-appearance: none;
     -moz-appearance: none;
+}
+.solve{
+    background: var(--dark-light);
 }
 .empty{
     display: inline-block;
