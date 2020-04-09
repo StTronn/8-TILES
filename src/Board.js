@@ -144,7 +144,7 @@ export class Board extends React.Component {
       return (
         <div>
           <div className="card">
-            <div className="board" onKeyDown={this.handleChange} tabIndex="0">
+            <div className="board">
               {//box section
               this.state.grid.map((list, i) => {
                 return (
