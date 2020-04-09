@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/8-TILES/static/css/main.ad46a91d.chunk.css",
+    "main.css": "/8-TILES/static/css/main.be8297c8.chunk.css",
     "main.js": "/8-TILES/static/js/main.a4e67208.chunk.js",
     "main.js.map": "/8-TILES/static/js/main.a4e67208.chunk.js.map",
     "runtime-main.js": "/8-TILES/static/js/runtime-main.979b5fdd.js",
@@ -8,8 +8,8 @@
     "static/js/2.bb08a7a2.chunk.js": "/8-TILES/static/js/2.bb08a7a2.chunk.js",
     "static/js/2.bb08a7a2.chunk.js.map": "/8-TILES/static/js/2.bb08a7a2.chunk.js.map",
     "index.html": "/8-TILES/index.html",
-    "precache-manifest.f2b105abf0e72e4ef1c5ac893e29f5e9.js": "/8-TILES/precache-manifest.f2b105abf0e72e4ef1c5ac893e29f5e9.js",
+    "precache-manifest.f18373aaa3d75920845be64f6d332e4a.js": "/8-TILES/precache-manifest.f18373aaa3d75920845be64f6d332e4a.js",
     "service-worker.js": "/8-TILES/service-worker.js",
-    "static/css/main.ad46a91d.chunk.css.map": "/8-TILES/static/css/main.ad46a91d.chunk.css.map"
+    "static/css/main.be8297c8.chunk.css.map": "/8-TILES/static/css/main.be8297c8.chunk.css.map"
   }
 }
