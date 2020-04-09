@@ -4,7 +4,21 @@ import { listMoves } from "./solver";
 import { handleTouchMove, handleTouchStart } from "./swipe";
 
 function Tile(props) {
-  if (props.value !== 0) return <span className="tile">{props.value}</span>;
+  let { index, handleClick } = props;
+  if (props.value !== 0)
+    return (
+      <span
+        style={{
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          handleClick(index);
+        }}
+        className="tile"
+      >
+        {props.value}
+      </span>
+    );
   else return <span className="empty">.</span>;
 }
 
@@ -133,6 +147,23 @@ export class Board extends React.Component {
     this.stopClock();
     this.setState({ grid, could_be_won, empty_i: 2, empty_j: 2, time: 0 });
   };
+
+  handleClick = (index) => {
+    let { i, j } = index;
+    let { empty_i, empty_j } = this.state;
+    if (empty_i === i + 1 && empty_j === j) {
+      this.handleChange(false, true, 40);
+    }
+    if (empty_i === i - 1 && empty_j === j) {
+      this.handleChange(false, true, 38);
+    }
+    if (empty_j === j - 1 && empty_i == i) {
+      this.handleChange(false, true, 37);
+    }
+    if (empty_j === j + 1 && empty_i == i) {
+      this.handleChange(false, true, 39);
+    }
+  };
   render() {
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
@@ -150,7 +181,18 @@ export class Board extends React.Component {
                 return (
                   <div key={i}>
                     {list.map((item, j) => {
-                      return <Tile value={this.state.grid[i][j]} key={j} />;
+                      let index = {
+                        i,
+                        j,
+                      };
+                      return (
+                        <Tile
+                          value={this.state.grid[i][j]}
+                          key={j}
+                          index={index}
+                          handleClick={this.handleClick}
+                        />
+                      );
                     })}
                   </div>
                 );
