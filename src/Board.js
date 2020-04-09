@@ -249,18 +249,23 @@ export class Board extends React.Component {
               </h3>
             </div>
           </div>
-          <div>
+          <div
+            style={{
+              display: "grid",
+              justifyItems: "center",
+            }}
+          >
             <h1>
               You won in {Math.floor(this.state.time / 60)}:
               {this.state.time % 60}{" "}
-              <button
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                Play Again
-              </button>
             </h1>
+            <button
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Play Again
+            </button>
           </div>
         </div>
       );
