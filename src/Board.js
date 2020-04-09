@@ -1,6 +1,8 @@
 import React from "react";
 import { shuffleGrid, calculateWinner } from "./shuffle";
 import { listMoves } from "./solver";
+import { handleTouchMove, getTouches, handleTouchStart } from "./swipe";
+
 function Tile(props) {
   if (props.value !== 0) return <span className="tile">{props.value}</span>;
   else return <span className="empty">.</span>;
@@ -59,11 +61,15 @@ export class Board extends React.Component {
     this.reset();
     this.setState({ solving: false });
   };
-  handleChange = (event) => {
+  handleChange = (event, swipe = false, swipeKey = 0) => {
     let grid = this.state.grid;
     let empty_i = this.state.empty_i;
     let empty_j = this.state.empty_j;
-    let key = event.keyCode;
+    let key;
+    if (!swipe) {
+      key = event.keyCode;
+    }
+    if (swipe) key = swipeKey;
     let down = key === 40 && empty_i !== 0;
     let up = key === 38 && empty_i !== 2;
     let right = key === 39 && empty_j !== 0;
@@ -96,6 +102,11 @@ export class Board extends React.Component {
       this.setState({ grid: grid, empty_i: i, empty_j: j });
     }
   };
+  handleSwipe = (event) => {
+    let value = handleTouchMove(event);
+    this.handleChange(event, true, value);
+    console.log(value);
+  };
   shuffleBoard = () => {
     this.startClock();
     let grid = shuffleGrid();
@@ -126,6 +137,9 @@ export class Board extends React.Component {
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
     document.addEventListener("keydown", this.handleChange);
+    document.addEventListener("touchstart", handleTouchStart, false);
+    document.addEventListener("touchmove", this.handleSwipe, false);
+
     if (!won)
       return (
         <div>
