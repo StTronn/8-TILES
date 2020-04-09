@@ -52,6 +52,7 @@ body{
     padding: 15px;
     border-radius:2px; 
     background-color:var(--dark-dark); 
+    width:max-content;
 }
 .clock{
     text-align: center;
@@ -89,4 +90,9 @@ button {
     text-align: center;
     font-size:1.4em;
     line-height: 1.64em;
+}
+endGame{
+    display:grid;
+    justify-items:center;
+    color:red;
 }

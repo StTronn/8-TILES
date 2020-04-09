@@ -1,7 +1,7 @@
 import React from "react";
 import { shuffleGrid, calculateWinner } from "./shuffle";
 import { listMoves } from "./solver";
-import { handleTouchMove, getTouches, handleTouchStart } from "./swipe";
+import { handleTouchMove, handleTouchStart } from "./swipe";
 
 function Tile(props) {
   if (props.value !== 0) return <span className="tile">{props.value}</span>;
@@ -177,18 +177,49 @@ export class Board extends React.Component {
       );
     else {
       this.stopClock();
+      document.removeEventListener("keydown", this.handleChange);
+      document.removeEventListener("touchstart", handleTouchStart, false);
+      document.removeEventListener("touchmove", this.handleSwipe, false);
+
       return (
-        <div>
-          <h1>
-            You won in {Math.floor(this.state.time / 60)}:{this.state.time % 60}{" "}
-            <button
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Play Again
-            </button>
-          </h1>
+        <div
+          style={{
+            display: "grid",
+            justifyItems: "center",
+          }}
+        >
+          <div>
+            <h1>
+              You won in {Math.floor(this.state.time / 60)}:
+              {this.state.time % 60}{" "}
+              <button
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Play Again
+              </button>
+            </h1>
+          </div>
+          <div className="card">
+            <div className="board">
+              {//box section
+              this.state.grid.map((list, i) => {
+                return (
+                  <div key={i}>
+                    {list.map((item, j) => {
+                      return <Tile value={this.state.grid[i][j]} key={j} />;
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="clock">
+              <h3>
+                {Math.floor(this.state.time / 60)} : {this.state.time % 60}
+              </h3>
+            </div>
+          </div>
         </div>
       );
     }
