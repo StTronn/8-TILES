@@ -29,6 +29,7 @@ body{
     background-color:  #4b86b4 ; 
     overscroll-behavior: contain;
     overflow: hidden;
+    user-select:none;
 }
 
 
