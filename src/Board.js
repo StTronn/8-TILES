@@ -188,19 +188,6 @@ export class Board extends React.Component {
             justifyItems: "center",
           }}
         >
-          <div>
-            <h1>
-              You won in {Math.floor(this.state.time / 60)}:
-              {this.state.time % 60}{" "}
-              <button
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                Play Again
-              </button>
-            </h1>
-          </div>
           <div className="card">
             <div className="board">
               {//box section
@@ -219,6 +206,19 @@ export class Board extends React.Component {
                 {Math.floor(this.state.time / 60)} : {this.state.time % 60}
               </h3>
             </div>
+          </div>
+          <div>
+            <h1>
+              You won in {Math.floor(this.state.time / 60)}:
+              {this.state.time % 60}{" "}
+              <button
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Play Again
+              </button>
+            </h1>
           </div>
         </div>
       );
