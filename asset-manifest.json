@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/8-TILES/static/css/main.7e6d3def.chunk.css",
-    "main.js": "/8-TILES/static/js/main.3f4773c6.chunk.js",
-    "main.js.map": "/8-TILES/static/js/main.3f4773c6.chunk.js.map",
+    "main.css": "/8-TILES/static/css/main.d2662720.chunk.css",
+    "main.js": "/8-TILES/static/js/main.a613be50.chunk.js",
+    "main.js.map": "/8-TILES/static/js/main.a613be50.chunk.js.map",
     "runtime-main.js": "/8-TILES/static/js/runtime-main.979b5fdd.js",
     "runtime-main.js.map": "/8-TILES/static/js/runtime-main.979b5fdd.js.map",
     "static/js/2.bb08a7a2.chunk.js": "/8-TILES/static/js/2.bb08a7a2.chunk.js",
     "static/js/2.bb08a7a2.chunk.js.map": "/8-TILES/static/js/2.bb08a7a2.chunk.js.map",
     "index.html": "/8-TILES/index.html",
-    "precache-manifest.9d6d545ed5fc7869b4fb90d36fb5b5af.js": "/8-TILES/precache-manifest.9d6d545ed5fc7869b4fb90d36fb5b5af.js",
+    "precache-manifest.319b8831c36de8f37386dc0fc64450c3.js": "/8-TILES/precache-manifest.319b8831c36de8f37386dc0fc64450c3.js",
     "service-worker.js": "/8-TILES/service-worker.js",
-    "static/css/main.7e6d3def.chunk.css.map": "/8-TILES/static/css/main.7e6d3def.chunk.css.map"
+    "static/css/main.d2662720.chunk.css.map": "/8-TILES/static/css/main.d2662720.chunk.css.map"
   }
 }
