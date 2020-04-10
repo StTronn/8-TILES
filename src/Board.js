@@ -4,7 +4,11 @@ import { listMoves } from "./solver";
 import { handleTouchMove, handleTouchStart } from "./swipe";
 
 function Tile(props) {
-  let { index, handleClick } = props;
+  let { index, handleClick, correctPosition } = props;
+
+  // uncomment to disable highlighting when tile is in correct position
+  // correctPosition = false;
+  
   if (props.value !== 0)
     return (
       <span
@@ -14,7 +18,7 @@ function Tile(props) {
         onClick={() => {
           handleClick(index);
         }}
-        className="tile"
+        className={`tile ${correctPosition && ('tile-correct')}`}
       >
         {props.value}
       </span>
@@ -164,6 +168,18 @@ export class Board extends React.Component {
       this.handleChange(false, true, 39);
     }
   };
+
+  // calculates whether this tile is in the correct position.
+  // works for any potential future board sizes, not just 3x3
+  calculateTileCorrect = (i, j, value) => {
+    
+    // assuming all rows will have the same amount of tiles
+    const tilesPerRow = this.state.grid[0].length; 
+    const correctPosition = (i * tilesPerRow) + (j + 1);
+
+    return value === correctPosition;
+  }
+
   render() {
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
@@ -171,6 +187,12 @@ export class Board extends React.Component {
     document.addEventListener("touchstart", handleTouchStart, false);
     document.addEventListener("touchmove", this.handleSwipe, false);
 
+    let minutes = Math.floor(this.state.time / 60);
+    let seconds = this.state.time % 60;
+    // check whether we need to add a leading zero
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    let formattedTime = `${minutes} : ${seconds}`;
+    
     if (!won)
       return (
         <div>
@@ -191,6 +213,7 @@ export class Board extends React.Component {
                           key={j}
                           index={index}
                           handleClick={this.handleClick}
+                          correctPosition={this.calculateTileCorrect(i, j, this.state.grid[i][j])}
                         />
                       );
                     })}
@@ -200,7 +223,7 @@ export class Board extends React.Component {
             </div>
             <div className="clock">
               <h3>
-                {Math.floor(this.state.time / 60)} : {this.state.time % 60}
+                {formattedTime}
               </h3>
             </div>
           </div>
@@ -237,7 +260,7 @@ export class Board extends React.Component {
                 return (
                   <div key={i}>
                     {list.map((item, j) => {
-                      return <Tile value={this.state.grid[i][j]} key={j} />;
+                      return <Tile value={this.state.grid[i][j]} key={j} correctPosition={this.calculateTileCorrect(i, j, this.state.grid[i][j])} />;
                     })}
                   </div>
                 );
@@ -245,7 +268,7 @@ export class Board extends React.Component {
             </div>
             <div className="clock">
               <h3>
-                {Math.floor(this.state.time / 60)} : {this.state.time % 60}
+                {formattedTime}
               </h3>
             </div>
           </div>
@@ -256,8 +279,7 @@ export class Board extends React.Component {
             }}
           >
             <h1>
-              You won in {Math.floor(this.state.time / 60)}:
-              {this.state.time % 60}{" "}
+              You won in {formattedTime}
             </h1>
             <button
               onClick={() => {
