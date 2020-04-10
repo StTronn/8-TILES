@@ -49,6 +49,9 @@ body{
     line-height: 1.64em;
     font-size:1.4em;
 }
+.tile-correct{
+    background-color:var(--dark-dark);
+}
 .card{ 
     padding: 15px;
     border-radius:2px; 
