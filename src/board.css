@@ -50,7 +50,7 @@ body{
     font-size:1.4em;
 }
 .tile-correct{
-    background-color:turquoise;
+    background-color:var(--dark-dark);
 }
 .card{ 
     padding: 15px;
