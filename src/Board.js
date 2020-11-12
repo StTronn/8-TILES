@@ -8,7 +8,7 @@ function Tile(props) {
 
   // uncomment to disable highlighting when tile is in correct position
   // correctPosition = false;
-  
+
   if (props.value !== 0)
     return (
       <span
@@ -18,7 +18,7 @@ function Tile(props) {
         onClick={() => {
           handleClick(index);
         }}
-        className={`tile ${correctPosition && ('tile-correct')}`}
+        className={`tile ${correctPosition && "tile-correct"}`}
       >
         {props.value}
       </span>
@@ -42,22 +42,32 @@ export class Board extends React.Component {
       solving: false,
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleChange);
+    document.addEventListener("touchstart", handleTouchStart, false);
+    document.addEventListener("touchmove", this.handleSwipe, false);
+  }
+
   componentWillUnmount() {
     //this.stopClock();
   }
+
   startClock = () => {
     this.interval = setInterval(this.increment, 1000);
   };
+
   stopClock = () => {
     window.clearInterval(this.interval);
   };
+
   increment = () => {
     this.setState((state) => ({ time: state.time + 1 }));
   };
+
   started_solving = () => {
     this.setState({ could_be_won: false, solving: true });
   };
+
   solve = () => {
     let sol = listMoves(this.state.grid);
     let i = 0;
@@ -74,11 +84,13 @@ export class Board extends React.Component {
       //    this.setState(sol[i]);
     }
   };
+
   stop_solve = () => {
     clearInterval(this.timer);
     this.reset();
     this.setState({ solving: false });
   };
+
   handleChange = (event, swipe = false, swipeKey = 0) => {
     let grid = this.state.grid;
     let empty_i = this.state.empty_i;
@@ -120,11 +132,12 @@ export class Board extends React.Component {
       this.setState({ grid: grid, empty_i: i, empty_j: j });
     }
   };
+
   handleSwipe = (event) => {
     let value = handleTouchMove(event);
     this.handleChange(event, true, value);
-    console.log(value);
   };
+
   shuffleBoard = () => {
     this.startClock();
     let grid = shuffleGrid();
@@ -161,10 +174,10 @@ export class Board extends React.Component {
     if (empty_i === i - 1 && empty_j === j) {
       this.handleChange(false, true, 38);
     }
-    if (empty_j === j - 1 && empty_i == i) {
+    if (empty_j === j - 1 && empty_i === i) {
       this.handleChange(false, true, 37);
     }
-    if (empty_j === j + 1 && empty_i == i) {
+    if (empty_j === j + 1 && empty_i === i) {
       this.handleChange(false, true, 39);
     }
   };
@@ -172,59 +185,58 @@ export class Board extends React.Component {
   // calculates whether this tile is in the correct position.
   // works for any potential future board sizes, not just 3x3
   calculateTileCorrect = (i, j, value) => {
-    
     // assuming all rows will have the same amount of tiles
-    const tilesPerRow = this.state.grid[0].length; 
-    const correctPosition = (i * tilesPerRow) + (j + 1);
+    const tilesPerRow = this.state.grid[0].length;
+    const correctPosition = i * tilesPerRow + (j + 1);
 
     return value === correctPosition;
-  }
+  };
 
   render() {
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
-    document.addEventListener("keydown", this.handleChange);
-    document.addEventListener("touchstart", handleTouchStart, false);
-    document.addEventListener("touchmove", this.handleSwipe, false);
-
     let minutes = Math.floor(this.state.time / 60);
     let seconds = this.state.time % 60;
     // check whether we need to add a leading zero
-    seconds = seconds < 10 ? '0' + seconds : seconds;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
     let formattedTime = `${minutes} : ${seconds}`;
-    
+
     if (!won)
       return (
         <div>
           <div className="card">
             <div className="board">
-              {//box section
-              this.state.grid.map((list, i) => {
-                return (
-                  <div key={i}>
-                    {list.map((item, j) => {
-                      let index = {
-                        i,
-                        j,
-                      };
-                      return (
-                        <Tile
-                          value={this.state.grid[i][j]}
-                          key={j}
-                          index={index}
-                          handleClick={this.handleClick}
-                          correctPosition={this.calculateTileCorrect(i, j, this.state.grid[i][j])}
-                        />
-                      );
-                    })}
-                  </div>
-                );
-              })}
+              {
+                //box section
+                this.state.grid.map((list, i) => {
+                  return (
+                    <div key={i}>
+                      {list.map((item, j) => {
+                        let index = {
+                          i,
+                          j,
+                        };
+                        return (
+                          <Tile
+                            value={this.state.grid[i][j]}
+                            key={j}
+                            index={index}
+                            handleClick={this.handleClick}
+                            correctPosition={this.calculateTileCorrect(
+                              i,
+                              j,
+                              this.state.grid[i][j]
+                            )}
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })
+              }
             </div>
             <div className="clock">
-              <h3>
-                {formattedTime}
-              </h3>
+              <h3>{formattedTime}</h3>
             </div>
           </div>
           <div className="buttons">
@@ -255,21 +267,31 @@ export class Board extends React.Component {
         >
           <div className="card">
             <div className="board">
-              {//box section
-              this.state.grid.map((list, i) => {
-                return (
-                  <div key={i}>
-                    {list.map((item, j) => {
-                      return <Tile value={this.state.grid[i][j]} key={j} correctPosition={this.calculateTileCorrect(i, j, this.state.grid[i][j])} />;
-                    })}
-                  </div>
-                );
-              })}
+              {
+                //box section
+                this.state.grid.map((list, i) => {
+                  return (
+                    <div key={i}>
+                      {list.map((item, j) => {
+                        return (
+                          <Tile
+                            value={this.state.grid[i][j]}
+                            key={j}
+                            correctPosition={this.calculateTileCorrect(
+                              i,
+                              j,
+                              this.state.grid[i][j]
+                            )}
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })
+              }
             </div>
             <div className="clock">
-              <h3>
-                {formattedTime}
-              </h3>
+              <h3>{formattedTime}</h3>
             </div>
           </div>
           <div
@@ -278,9 +300,7 @@ export class Board extends React.Component {
               justifyItems: "center",
             }}
           >
-            <h1>
-              You won in {formattedTime}
-            </h1>
+            <h1>You won in {formattedTime}</h1>
             <button
               onClick={() => {
                 window.location.reload();
