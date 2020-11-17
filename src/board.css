@@ -5,17 +5,11 @@
     --main:#3949ab;
     --dark:#00227b;
     --dark-primary:#283655;
-    --dark-light:#4d648d    ;
+    --dark-light:#4d648d;
     --dark-dark: #1e1f26;
     --bg-color:#408697;
 }
 
-h1{
-    text-align: center;
-    margin-top:50px;
-    margin-bottom:50px;
-    letter-spacing: 0.2em;
-}
 h3{
     margin-top:20px;
     margin-bottom: 20px; 
@@ -52,12 +46,14 @@ body{
 .tile-correct{
     background-color:var(--dark-dark);
 }
+
 .card{ 
     padding: 15px;
     border-radius:2px; 
     background-color:var(--dark-dark); 
     width:max-content;
 }
+
 .clock{
     text-align: center;
     font-size:1.2em;
