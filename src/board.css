@@ -79,6 +79,26 @@ button {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+.in{
+    display: inline-block;
+    margin: 0 auto;
+    border: none;
+    padding: 1rem 2rem;
+    margin: 0;
+    text-decoration: none;
+    background: var(--dark-light);
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
 .solve{
     background: var(--dark-light);
 }

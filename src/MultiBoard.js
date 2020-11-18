@@ -1,5 +1,6 @@
 import React from "react";
 import Tile from "./Tile";
+import NameField from "./NameField";
 import { shuffleGrid, calculateWinner } from "./shuffle";
 import { withRouter } from "react-router-dom";
 import queryString from "query-string";
@@ -210,13 +211,15 @@ class Board extends React.Component {
                 <h3>{formattedTime}</h3>
               </div>
             </div>
-
-            <button
-              className="w-full"
-              onClick={correct ? this.shuffleBoard : this.reset}
-            >
-              {correct ? "START" : "RESET"}
-            </button>
+            <div>
+              <button
+                className="w-full"
+                onClick={correct ? this.shuffleBoard : this.reset}
+              >
+                {correct ? "START" : "RESET"}
+              </button>
+            </div>
+            <NameField />
           </div>
           <BoardRender
             grid={this.state.grid}
@@ -274,7 +277,9 @@ class Board extends React.Component {
               justifyItems: "center",
             }}
           >
-            <h1>You won in {formattedTime}</h1>
+            <h1 className="text-lg font-medium my-8">
+              You won in {formattedTime}
+            </h1>
             <button
               onClick={() => {
                 window.location.reload();

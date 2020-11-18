@@ -300,7 +300,9 @@ export class Board extends React.Component {
               justifyItems: "center",
             }}
           >
-            <h1>You won in {formattedTime}</h1>
+            <h1 className="text-lg font-medium my-8">
+              You won in {formattedTime}
+            </h1>
             <button
               onClick={() => {
                 window.location.reload();
