@@ -12,6 +12,18 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      gameObj: {},
+      otherUser: {
+        empty_i: 2,
+        empty_j: 2,
+        grid: [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 0],
+        ],
+        could_be_won: false,
+      },
+      id: 1,
       username: "tronn",
       empty_i: 2,
       empty_j: 2,
@@ -23,15 +35,35 @@ class Board extends React.Component {
       could_be_won: false,
       time: 0,
       solving: false,
+      won: false,
     };
   }
 
   componentDidMount() {
     this.socket = io("http://localhost:8000");
+    this.socket.on("connect", () => {
+      this.setState({ id: this.socket.id });
+    });
     const { roomId } = queryString.parse(this.props.location.search);
     if (!roomId) this.props.history.push("/multiplayer/?roomId=123");
     this.setState({ roomId });
 
+    //socket listners
+    this.socket.on("initGame", (gameObj) => {
+      console.log(gameObj);
+      const { id } = this.state;
+      this.shuffleBoard(gameObj.users[id].grid);
+      const otherId = getOtherId(id, gameObj);
+      this.setState({ otherUser: gameObj.users[otherId] });
+    });
+
+    this.socket.on("updateObj", (gameObj) => {
+      const { id } = this.state;
+      const otherId = getOtherId(id, gameObj);
+      this.setState({ otherUser: gameObj.users[otherId] });
+    });
+
+    //event handler for controls
     document.addEventListener("keydown", this.handleChange);
     document.addEventListener("touchstart", handleTouchStart, false);
     document.addEventListener("touchmove", this.handleSwipe, false);
@@ -96,7 +128,17 @@ class Board extends React.Component {
       let temp = grid[empty_i][empty_j];
       grid[empty_i][empty_j] = grid[i][j];
       grid[i][j] = temp;
-      this.setState({ grid: grid, empty_i: i, empty_j: j });
+      this.setState({ grid: grid, empty_i: i, empty_j: j }, () => {
+        const { id, roomId } = this.state;
+        let correct = calculateWinner(this.state.grid);
+        let won = correct && this.state.could_be_won;
+        if (this.socket && roomId)
+          this.socket.emit("updateUser", {
+            id,
+            roomId,
+            payload: { ...this.state, ...{ won } },
+          });
+      });
     }
   };
 
@@ -105,9 +147,9 @@ class Board extends React.Component {
     this.handleChange(event, true, value);
   };
 
-  shuffleBoard = () => {
+  shuffleBoard = (board) => {
     this.startClock();
-    let grid = shuffleGrid();
+    let grid = board ? board : shuffleGrid();
     let could_be_won = true;
     let i, j;
     let empty_i, empty_j;
@@ -160,6 +202,10 @@ class Board extends React.Component {
     return value === correctPosition;
   };
 
+  handleUsername = (username) => {
+    this.setState({ username });
+  };
+
   render() {
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
@@ -168,7 +214,6 @@ class Board extends React.Component {
     // check whether we need to add a leading zero
     seconds = seconds < 10 ? "0" + seconds : seconds;
     let formattedTime = `${minutes} : ${seconds}`;
-
     if (!won)
       return (
         <div
@@ -214,16 +259,19 @@ class Board extends React.Component {
             <div>
               <button
                 className="w-full"
-                onClick={correct ? this.shuffleBoard : this.reset}
+                onClick={correct ? this.joinRoom : () => {}}
               >
-                {correct ? "START" : "RESET"}
+                {correct ? "JOIN" : "WAITING..."}
               </button>
             </div>
-            <NameField />
+            <NameField
+              username={this.state.username}
+              handleUsername={this.handleUsername}
+            />
           </div>
           <BoardRender
-            grid={this.state.grid}
-            could_be_won={this.state.could_be_won}
+            grid={this.state.otherUser.grid}
+            could_be_won={this.state.otherUser.could_be_won}
             time={this.state.time}
             calculateTileCorrect={this.calculateTileCorrect}
           />
@@ -293,6 +341,12 @@ class Board extends React.Component {
     }
   }
 }
+
+const getOtherId = (id, gameObj) => {
+  const key0 = Object.keys(gameObj.users)[0];
+  const key1 = Object.keys(gameObj.users)[1];
+  return id === key0 ? key1 : key0;
+};
 
 const BoardWithRouter = withRouter(Board);
 export default BoardWithRouter;
