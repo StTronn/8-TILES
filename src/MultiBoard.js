@@ -36,6 +36,7 @@ class Board extends React.Component {
       time: 0,
       solving: false,
       won: false,
+      gameOver: false,
     };
   }
 
@@ -61,6 +62,10 @@ class Board extends React.Component {
       const { id } = this.state;
       const otherId = getOtherId(id, gameObj);
       this.setState({ otherUser: gameObj.users[otherId] });
+    });
+
+    this.socket.on("gameOver", () => {
+      this.setState({ gameOver: true });
     });
 
     //event handler for controls
@@ -207,6 +212,7 @@ class Board extends React.Component {
   };
 
   render() {
+    const { gameOver } = this.state;
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
     let minutes = Math.floor(this.state.time / 60);
@@ -214,7 +220,7 @@ class Board extends React.Component {
     // check whether we need to add a leading zero
     seconds = seconds < 10 ? "0" + seconds : seconds;
     let formattedTime = `${minutes} : ${seconds}`;
-    if (!won)
+    if (!won && !gameOver)
       return (
         <div
           className="grid grid-cols-2 gap-x-32"
@@ -271,6 +277,7 @@ class Board extends React.Component {
           </div>
           <BoardRender
             grid={this.state.otherUser.grid}
+            username={this.state.otherUser.username}
             could_be_won={this.state.otherUser.could_be_won}
             time={this.state.time}
             calculateTileCorrect={this.calculateTileCorrect}
@@ -285,57 +292,71 @@ class Board extends React.Component {
 
       return (
         <div
-          style={{
-            display: "grid",
-            justifyItems: "center",
-          }}
+          className="grid grid-cols-2 gap-x-32"
+          style={{ maxWidth: "fit-content" }}
         >
-          <div className="card">
-            <div className="board">
-              {
-                //box section
-                this.state.grid.map((list, i) => {
-                  return (
-                    <div key={i}>
-                      {list.map((item, j) => {
-                        return (
-                          <Tile
-                            value={this.state.grid[i][j]}
-                            key={j}
-                            correctPosition={this.calculateTileCorrect(
-                              i,
-                              j,
-                              this.state.grid[i][j]
-                            )}
-                          />
-                        );
-                      })}
-                    </div>
-                  );
-                })
-              }
+          <div>
+            <div className="card">
+              <div className="board">
+                {
+                  //box section
+                  this.state.grid.map((list, i) => {
+                    return (
+                      <div key={i}>
+                        {list.map((item, j) => {
+                          return (
+                            <Tile
+                              value={this.state.grid[i][j]}
+                              key={j}
+                              correctPosition={this.calculateTileCorrect(
+                                i,
+                                j,
+                                this.state.grid[i][j]
+                              )}
+                            />
+                          );
+                        })}
+                      </div>
+                    );
+                  })
+                }
+              </div>
+              <div className="clock">
+                <h3>{formattedTime}</h3>
+              </div>
             </div>
-            <div className="clock">
-              <h3>{formattedTime}</h3>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              justifyItems: "center",
-            }}
-          >
-            <h1 className="text-lg font-medium my-8">
-              You won in {formattedTime}
-            </h1>
-            <button
-              onClick={() => {
-                window.location.reload();
+            <div
+              style={{
+                display: "grid",
+                justifyItems: "center",
               }}
             >
-              Play Again
-            </button>
+              {won && (
+                <h1 className="text-lg font-medium my-8">
+                  You won in {formattedTime}
+                </h1>
+              )}
+              {!won && (
+                <h1 className="text-lg font-medium my-8">
+                  Better Luck next time
+                </h1>
+              )}
+              <button
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Play Again
+              </button>
+            </div>
           </div>
+
+          <BoardRender
+            grid={this.state.otherUser.grid}
+            could_be_won={this.state.otherUser.could_be_won}
+            time={this.state.time}
+            calculateTileCorrect={this.calculateTileCorrect}
+          />
         </div>
       );
     }
