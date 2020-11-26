@@ -19,7 +19,7 @@ export default class BoardRender extends React.Component {
     seconds = seconds < 10 ? "0" + seconds : seconds;
     let formattedTime = `${minutes} : ${seconds}`;
 
-    if (!won)
+    if (username)
       return (
         <div>
           <div className="card">
@@ -64,36 +64,8 @@ export default class BoardRender extends React.Component {
       );
     else {
       return (
-        <div>
-          <div className="card">
-            <div className="board">
-              {
-                //box section
-                grid.map((list, i) => {
-                  return (
-                    <div key={i}>
-                      {list.map((item, j) => {
-                        return (
-                          <Tile
-                            value={grid[i][j]}
-                            key={j}
-                            correctPosition={calculateTileCorrect(
-                              i,
-                              j,
-                              grid[i][j]
-                            )}
-                          />
-                        );
-                      })}
-                    </div>
-                  );
-                })
-              }
-            </div>
-            <div className="clock">
-              <h3>{formattedTime}</h3>
-            </div>
-          </div>
+        <div className="grid place-self-center ">
+          Waiting for other user...{" "}
         </div>
       );
     }

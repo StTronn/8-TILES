@@ -34,8 +34,10 @@ class Board extends React.Component {
       ],
       could_be_won: false,
       time: 0,
+      waitTime: 0,
       solving: false,
       won: false,
+      ready: false,
       gameOver: false,
     };
   }
@@ -49,13 +51,20 @@ class Board extends React.Component {
     if (!roomId) this.props.history.push("/multiplayer/?roomId=123");
     this.setState({ roomId });
 
+    //socket emitters
+    this.socket.emit("joinRoom", { roomId });
+
     //socket listners
     this.socket.on("initGame", (gameObj) => {
       console.log(gameObj);
       const { id } = this.state;
-      this.shuffleBoard(gameObj.users[id].grid);
-      const otherId = getOtherId(id, gameObj);
-      this.setState({ otherUser: gameObj.users[otherId] });
+      this.startWait();
+      setTimeout(() => {
+        this.shuffleBoard(gameObj.users[id].grid);
+        const otherId = getOtherId(id, gameObj);
+        console.log(gameObj.users[otherId]);
+        this.setState({ otherUser: gameObj.users[otherId] });
+      }, 3000);
     });
 
     this.socket.on("updateObj", (gameObj) => {
@@ -74,15 +83,24 @@ class Board extends React.Component {
     document.addEventListener("touchmove", this.handleSwipe, false);
   }
 
-  joinRoom = () => {
-    const { username, roomId } = this.state;
-    this.socket.emit("joinRoom", { username, roomId });
+  ready = () => {
+    const { id, roomId, username } = this.state;
+    this.setState({ ready: true }, () => {
+      this.socket.emit("updateUser", {
+        id,
+        roomId,
+        payload: { ready: true, username },
+      });
+    });
   };
+  Ti;
 
   componentWillUnmount() {
     //this.stopClock();
   }
-
+  startWait = () => {
+    this.waitInterval = setInterval(this.incrementWait, 1000);
+  };
   startClock = () => {
     this.interval = setInterval(this.increment, 1000);
   };
@@ -95,7 +113,17 @@ class Board extends React.Component {
     this.setState((state) => ({ time: state.time + 1 }));
   };
 
+  incrementWait = () => {
+    const { waitTime } = this.state;
+    if (waitTime == 3) {
+      window.clearInterval(this.waitInterval);
+      this.setState({ waitTime: 0 });
+    } else this.setState({ waitTime: waitTime + 1 });
+  };
+
   handleChange = (event, swipe = false, swipeKey = 0) => {
+    const { could_be_won } = this.state;
+    if (!could_be_won) return;
     let grid = this.state.grid;
     let empty_i = this.state.empty_i;
     let empty_j = this.state.empty_j;
@@ -137,7 +165,7 @@ class Board extends React.Component {
         const { id, roomId } = this.state;
         let correct = calculateWinner(this.state.grid);
         let won = correct && this.state.could_be_won;
-        if (this.socket && roomId)
+        if (this.socket && roomId && could_be_won)
           this.socket.emit("updateUser", {
             id,
             roomId,
@@ -212,7 +240,7 @@ class Board extends React.Component {
   };
 
   render() {
-    const { gameOver } = this.state;
+    const { gameOver, ready, waitTime, could_be_won } = this.state;
     let correct = calculateWinner(this.state.grid);
     let won = correct && this.state.could_be_won;
     let minutes = Math.floor(this.state.time / 60);
@@ -265,9 +293,15 @@ class Board extends React.Component {
             <div>
               <button
                 className="w-full"
-                onClick={correct ? this.joinRoom : () => {}}
+                onClick={correct ? this.ready : () => {}}
               >
-                {correct ? "JOIN" : "WAITING..."}
+                {waitTime !== 0 && `Starting in ${waitTime}`}
+                {!waitTime &&
+                  (!ready
+                    ? "Ready"
+                    : could_be_won
+                    ? "Put tiles in order"
+                    : "Waiting...")}
               </button>
             </div>
             <NameField
@@ -353,6 +387,7 @@ class Board extends React.Component {
 
           <BoardRender
             grid={this.state.otherUser.grid}
+            username={this.state.otherUser.username}
             could_be_won={this.state.otherUser.could_be_won}
             time={this.state.time}
             calculateTileCorrect={this.calculateTileCorrect}
